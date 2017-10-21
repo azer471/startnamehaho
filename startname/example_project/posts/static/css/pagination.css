@@ -1,0 +1,63 @@
+
+
+  #inner {
+ 
+display: inline-block;
+padding: 10px;
+
+}
+
+
+.pagination {
+
+
+font-size: 14px;
+
+clear: both;
+
+
+text-align: center;
+
+
+}
+
+.pagination span.step-links {
+border: 3px solid #9394AA;
+color: #1D1B1A;
+background-color: #292c2f;
+}
+
+
+
+.pagination a, .pagination span {
+    display: block;
+    float: right;
+    padding: 4px 10px 4px 10px;
+    margin-right: 3px;
+    color: #050404;
+    background: #FFF;
+}
+
+
+
+
+.pagination a, .pagination span {
+    border-radius: 700px;
+
+}
+
+
+
+
+
+.pagination a span.current {
+
+    color: #FFF;
+    background-color: #322c29;
+    border: solid 0px #070708;
+}
+.pagination a span.prev {
+
+    text-decoration: none;
+    border: solid 2.5px #9394AA;
+}
