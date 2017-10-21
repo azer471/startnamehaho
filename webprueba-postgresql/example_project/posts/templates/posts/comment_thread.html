@@ -1,0 +1,112 @@
+{% extends "posts/base.html" %}
+
+
+
+
+
+
+{% block content %}
+
+
+
+
+
+
+   
+
+  <div class="margin-c">
+
+  <div id="container">
+
+    <div class="dialogbox-p">
+
+      <div class="box_wrapper" id="{{ comment.id }}">
+
+        <div class="flecha up" id="plus"></div>
+        <div class="score" dir=ltr>{{ comment.votes_comment }}</div>
+        <div class="flecha down" id="minus"></div>
+
+      </div>
+
+      <div class="zone-image">
+        <div class="image-avatar">
+        <img class="video-thumb comment-author-thumbnail yt-thumb yt-thumb-48" src="{{ comment.author.profile.image_url}}" />
+        </div>
+      </div>
+
+      <div class="body-p">
+        <div class="comment-header">
+          من طرف: <a href="{% url 'posts:user_profile' comment.author %}">{{ comment.author }} </a>
+
+          <span class="timesince"> {{ comment.timestamp }} </span>
+        </div>
+        <div class="message-p">
+          <span>{{ comment.content }}</span>
+
+        </div>
+
+      </div>
+      <div class="comment-title">
+        
+        {% if comment.children.count > 0 %}عدد الإجابات:{{ comment.children.count }} 
+        {% if comment.children.count > 1 %}{% endif %} | {% endif %} 
+        <a class='fa fa-link' href="{{ comment.get_absolute_url }}"></a>
+
+
+      </div>
+
+
+    </div>     
+
+
+  {%  for child_comment in comment.children %}
+
+
+
+  <div class="dialogbox">
+    <div class="box_wrapper" id="{{ child_comment.id }}" >
+
+
+      <div class="flecha up" id="plus"></div>
+      <div class="score" dir=ltr>{{ child_comment.votes_comment }}</div>
+      <div class="flecha down" id="minus"></div>
+
+    </div>
+
+
+    <div class="zone-image-2">
+      <div class="image-avatar">
+      <img class="video-thumb comment-author-thumbnail yt-thumb yt-thumb-47" src="{{ child_comment.author.profile.image_url}}" />
+      </div>
+    </div>
+
+
+
+
+    <div class="body">
+      <span class="tip tip-up"></span>
+      <div class="comment-header">
+
+      من طرف:  <a href="{% url 'posts:user_profile' child_comment.author %}">{{ child_comment.author }} </a>
+
+      <span class="timesince"> {{ comment.timestamp }} </span>
+      </div>
+        <div class="message">
+
+
+      <span>  {{ child_comment.content }}</span>          
+      </div>
+    </div>
+  </div>
+
+
+
+
+  {% endfor %}
+  </div>
+</div>
+
+
+
+
+{% endblock content %}

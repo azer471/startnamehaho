@@ -1,0 +1,34 @@
+
+{% extends 'posts/base.html' %}
+{% block content %}
+
+{% load staticfiles %}
+
+  {% block head %}
+      <link rel="stylesheet" href="{% static 'css/article_form.css' %}">
+  {% endblock %}
+
+
+<div class="kontainer">  
+  <form id="contact" action="" method="post" enctype="multipart/form-data">
+    <h3>إنشاء حساب</h3>
+    <h4>تسجيل الدخول</h4>
+    <fieldset>
+    					{%  csrf_token  %}
+						{%  include 'posts/form_detail.html' %}
+	</fieldset>
+    <fieldset>
+      <button name="submit" type="submit" id="contact-submit" class="btn btn-success" data-submit="...Sending">Submit</button>
+    </fieldset>
+   
+  </form>
+</div>
+
+
+<!--  https://codepen.io/colorlib/pen/KVoZyv  -->
+
+
+
+
+
+{% endblock content %}

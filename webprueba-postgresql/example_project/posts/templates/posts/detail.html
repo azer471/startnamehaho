@@ -1,0 +1,260 @@
+{% extends 'posts/base.html' %}
+{% block content %}
+
+
+
+
+{% block head %}
+ <title>{{ article.title }}</title>
+
+{% endblock %}
+
+<div id="right">
+
+
+	<div class="zonearticle">
+
+
+
+
+		<div class="vote_wrapper" id="{{ article.id }}">
+		<li data-position="{{ article.votes }}"></li>
+
+		<div class="arrow up" id="plus"></div>
+		<div class="score" dir=ltr>{{ article.votes }}</div>
+
+		<div class="arrow down" id="minus"></div>
+		</div>
+
+
+		<div class="row">
+
+			<div class="post">
+				<div class="link">
+						{% if article.thumbnail %}
+						<img class="img-article" src="{{ article.thumbnail}}" />
+						{% endif %}
+					<h2>
+					<a href="{{article.url}}">{{ article.title }}</a>
+					</h2>
+				</div>
+
+				<div class="submited">
+
+
+					<span class="step-author"> من طرف:  <a href="{% url 'posts:user_profile' article.author %}"> {{ article.author }} </a></span>
+					{% if article.news_website %}	
+
+
+
+					<span class="step-website"> موقع:{{ article.news_website }}</span>
+					{% endif %}
+					{% if article.pageweb %}
+					<span class="step-wwebsite"> موقع:{{ article.pageweb }}</span>
+					{% endif %}
+					<span class="step-date">{{ article.created_date }}</span>		
+				</div> 
+				<div class="description">
+				{{ article.description }}
+				</div> 
+
+			</div>
+		
+		</div>
+
+
+	</div>	
+
+
+
+<!--Comienzo del Tab -->
+
+
+
+
+
+
+
+
+<!--Send Comment -->
+
+	<div class="sendcomment">
+		<h4> التعليقات:  الموقع لا يتحمل مسؤولية تعليقات المشاركين</h4>
+
+
+		{% if request.user.is_authenticated %}
+
+		<form class="form-style-9" method="POST" action="."> {% csrf_token %}
+		<h2>للتعليق:</h2>
+
+		<ul>
+		<li>
+		{{ comment_form }}
+
+		</li>
+		<li>
+			<div style="text-align:center">  
+			<input type="submit" value="أرسل" />
+			</div>
+			</li>
+		</ul>
+		</form>
+		{% else %}
+		<p>يجب عليك تسجيل الدخول للتعليق</p>
+		{% endif %}
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+	<div class="margin-b">
+	{% for comment in comments %}
+	<div id="container">
+
+		<div class="dialogbox-p">
+
+			<div class="box_wrapper" id="{{ comment.id }}">
+
+				<div class="flecha up" id="plus"></div>
+				<div class="score" dir=ltr>{{ comment.votes_comment }}</div>
+				<div class="flecha down" id="minus"></div>
+
+			</div>
+
+			<div class="zone-image">
+				<div class="image-avatar">
+				<img class="video-thumb comment-author-thumbnail yt-thumb yt-thumb-48" src="{{ comment.author.profile.image_url}}" />
+				</div>
+			</div>
+
+			<div class="body-p">
+				<div class="comment-header">
+					من طرف: <a href="{% url 'posts:user_profile' comment.author %}">{{ comment.author }} </a>
+
+					<span class="timesince"> {{ comment.timestamp }} </span>
+				</div>
+				<div class="message-p">
+					<span>{{ comment.content }}</span>
+
+				</div>
+
+			</div>
+			<div class="comment-title">
+				<a class="reply_btn" >لاجابة </a>|
+				{% if comment.children.count > 0 %}عدد الإجابات:{{ comment.children.count }} 
+				{% if comment.children.count > 1 %}{% endif %} | {% endif %} 
+				<a class='fa fa-link' href="{{ comment.get_absolute_url }}"></a>
+
+
+			</div>
+			{% if request.user.is_authenticated %}
+			<form method="POST" action="." class="reply-form" style="text-align:center">{% csrf_token %}
+			{{ comment_form }}
+
+			<div class="button-group">
+				<input type='hidden' name='parent_id' value='{{ comment.id }}'>
+				<input type='submit' value='لاجابة' class='btn btn-default'>
+				<input type="button" class="cancel_btn" value="إلغاء">
+
+			</div>
+			</form> 
+			{% endif %}
+
+
+		</div>     
+
+
+	{%  for child_comment in comment.children %}
+
+
+
+	<div class="dialogbox">
+		<div class="box_wrapper" id="{{ child_comment.id }}" >
+
+
+			<div class="flecha up" id="plus"></div>
+			<div class="score" dir=ltr>{{ child_comment.votes_comment }}</div>
+			<div class="flecha down" id="minus"></div>
+
+		</div>
+
+
+		<div class="zone-image-2">
+			<div class="image-avatar">
+			<img class="video-thumb comment-author-thumbnail yt-thumb yt-thumb-47" src="{{ child_comment.author.profile.image_url}}" />
+			</div>
+		</div>
+
+
+
+
+		<div class="body">
+			<span class="tip tip-up"></span>
+			<div class="comment-header">
+
+			من طرف:  <a href="{% url 'posts:user_profile' child_comment.author %}">{{ child_comment.author }} </a>
+
+			<span class="timesince"> {{ comment.timestamp }} </span>
+			</div>
+				<div class="message">
+
+
+			<span>  {{ child_comment.content }}</span>					
+			</div>
+		</div>
+	</div>
+
+
+
+
+	{% endfor %}
+	</div>
+
+	{% endfor %} 
+</div>
+</div>
+
+
+
+<div id="left">
+	<div class="sidebox black"> 
+		<div class="header"> <h2><a href="/popular">الأفضل تصنيفا في اليوم</a></h2> 
+		</div>
+		<div class="boddy">     
+		<div class="contenido">
+				{% for title_day in  title_day|slice:":10" %}
+		<ul><li> <a href="/{{ title_day.id }}/">{{ title_day.title }}</a></li></ul>
+
+				{% endfor %}	
+		</div>
+
+		</div>
+	</div>
+	<div class="sidebox black"> 
+		<div class="header"> <h2><a href="/popular">الأفضل تصنيفا في الاسبوع</a></h2> 
+		</div>
+		<div class="boddy">     
+		<div class="contenido">
+				{% for title_week in  title_week|slice:":10" %}
+		<ul><li> <a href="/{{ title_week.id }}/">{{ title_week.title }}</a></li></ul>
+
+				{% endfor %}	
+		</div>
+		</div>
+	</div>	
+</div>
+
+
+
+
+
+
+
+{% endblock content %}

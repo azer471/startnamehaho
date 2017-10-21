@@ -1,0 +1,152 @@
+
+
+{% extends 'posts/base.html' %}
+{% block content %}
+
+
+
+
+
+
+
+<div id="right">
+	{% for article in  blogs%}
+		<div class="article">
+
+			<div class="vote_wrapper" id="{{ article.id }}">
+				<li data-position="{{ article.votes }}"></li>
+
+				<div class="arrow up" id="plus"></div>
+				
+				<div class="score" dir=ltr>{{ article.votes }}</div>
+				
+				<div class="arrow down" id="minus"></div>
+			</div>
+
+
+				<div class="row">
+
+					<div class="post">
+
+						<div class="link">
+						{% if article.thumbnail %}
+						<img class="img-article" src="{{ article.thumbnail}}" />
+						{% endif %}
+						<h2>
+						<a href="{{article.url}}">{{ article.title }}</a>
+						</h2>
+
+						</div>
+
+						<div class="submited">
+						<span class="step-author"> من طرف:  <a href="{% url 'posts:user_profile' article.author %}"> {{ article.author }} </a></span>	
+						{% if article.news_website %}		
+						<span class="step-website"> موقع:{{ article.news_website }}</span>
+						{% endif %}
+						{% if article.pageweb %}
+						<span class="step-wwebsite"> موقع:{{ article.pageweb }}</span>
+						{% endif %}
+						<span class="step-date">{{ article.created_date }}</span>		
+						</div> 
+						<div class="description">
+						<p>{{ article.description }}</p>
+
+						</div> 
+					</div>
+
+					<div class="news-details">
+						<div class="news-details-main">
+						<div class="news-details-data-down">
+						<a href="/{{ article.id }}/"   title="من اجل التعليق عن الخبر!" class="myButton">تعليقات 
+		
+							{% if article.comments.count > 0 %}
+							{{ article.comments.count }}
+							{% endif %}
+
+
+
+
+
+
+						</a> 
+
+						<a href="posts/{{ article.id }}/report/" title="ابلاغ عن خبر غير صحيح!" class="myButton1" >الإبلاغ</a>
+
+					
+		
+				
+
+						</div>
+						</div>
+					</div>
+		<!--  separador               -->
+				</div>
+
+
+		</div>			
+	{% endfor %}	
+</div>	
+
+<div id="left">
+	<div class="sidebox black"> 
+		<div class="header"> <h2><a href="/popular">الأفضل تصنيفا في اليوم</a></h2> 
+		</div>
+		<div class="boddy">     
+		<div class="contenido">
+				{% for title_day in  title_day|slice:":10" %}
+		<ul><li> <a href="/{{ title_day.id }}/">{{ title_day.title }}</a></li></ul>
+
+				{% endfor %}	
+		</div>
+
+		</div>
+	</div>
+	<div class="sidebox black"> 
+		<div class="header"> <h2><a href="/popular">الأفضل تصنيفا في الاسبوع</a></h2> 
+		</div>
+		<div class="boddy">     
+		<div class="contenido">
+				{% for title_week in  title_week|slice:":10" %}
+		<ul><li> <a href="/{{ title_week.id }}/">{{ title_week.title }}</a></li></ul>
+
+				{% endfor %}	
+		</div>
+		</div>
+	</div>
+</div>
+
+
+	<div class="pagination">
+		<div id="inner">
+
+		    <span class="step-links">
+		    {% if blogs.has_previous %}
+		        <a href="?page={{blogs.previous_page_number}}{% if request.GET.q%}&q{{ request.GET.q }}{% endif%}">  <span class="prev">   &laquo; </span>  </a>
+		    {% endif %}
+
+
+		    {% for pg in page_range %}
+		        {% if blogs.number == pg %}
+
+		       
+		          <a href="?page={{pg}}" > <span class="current"> {{pg}}</span></a>
+		     
+		  
+
+
+		        {% else %}
+		          <a href="?page={{pg}}">{{pg}}</a>
+		        {% endif %}
+		    {% endfor %}
+
+		    {% if blogs.has_next %}
+		        <a href="?page={{blogs.next_page_number}}{% if request.GET.q%}&q{{ request.GET.q }}{% endif%}">  <span class="prev">   &raquo; </span>    </a>
+		    {% endif %}	 
+
+		    </span>
+		</div>
+	</div>
+
+
+
+{% endblock content %}
